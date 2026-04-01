@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>EverTapp</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrain+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="logo">EverTapp</div>
+    <div class="pair-chip active" data-pair="BTC/USDT">BTC/USDT</div>
+    <div class="live-dot"></div>
+    <div class="tb-price" id="tb-price">—</div>
+    <div class="tb-chg" id="tb-chg"></div>
+    <div class="tb-score">PTS <span id="tb-score">0</span></div>
+    <div class="network-badge">Starknet Sepolia</div>
+    <button class="btn-connect" id="btn-connect">Connect Wallet</button>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div class="layout">
+    <div class="price-axis">
+      <div class="pa-spacer"></div>
+      <div class="pa-body" id="pa-body"></div>
+    </div>
+    <div class="grid-col">
+      <div class="timebar"><canvas id="timebar-canvas"></canvas></div>
+      <div class="scroll-area" id="scroll-area">
+        <canvas id="main-canvas"></canvas>
+        <div id="cell-layer"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="/app.js"></script>
+</body>
+
+</html>
