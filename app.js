@@ -1,5 +1,4 @@
 import { StarkZap, OnboardStrategy } from "starkzap";
-import "./style.css";
 
 // ═══════════════════════════════════════════════
 //  CONFIG
@@ -414,9 +413,9 @@ function createCell(row, colIdx, colTime, isPast){
 
   let bg;
   if(isPast){
-    bg = 'rgba(0,0,0,0.03)';
+    bg = 'rgba(0,0,0,0.025)';
   } else {
-    bg = 'rgba(245,235,220,0.5)';
+    bg = 'rgba(242,234,216,0.5)';
   }
 
   const mult = calcMult(absDist, timeDist);
@@ -439,21 +438,21 @@ function createCell(row, colIdx, colTime, isPast){
 
   if (bet && !bet.resolved) {
       cell.dataset.placed = '1';
-      cell.style.background = 'rgba(245,197,24,0.12)';
-      cell.style.outline = '1.5px solid rgba(245,197,24,0.6)';
+      cell.style.background = 'rgba(160,120,32,0.10)';
+      cell.style.outline = '1.5px solid rgba(160,120,32,0.55)';
       cell.style.outlineOffset = '-1px';
   }
 
   const priceEl = document.createElement('div');
-  priceEl.style.cssText = `font-size:13px;font-weight:700;color:${isPast?'rgba(0,0,0,0.25)':isUp?'rgba(0,168,84,0.9)':'rgba(234,57,67,0.9)'};`;
+  priceEl.style.cssText = `font-size:13px;font-weight:700;color:${isPast?'rgba(0,0,0,0.22)':isUp?'rgba(42,124,79,0.9)':'rgba(140,32,32,0.9)'};`;
   if (bet && !bet.resolved) {
-      priceEl.style.color = 'rgba(245,197,24,0.9)';
+      priceEl.style.color = 'rgba(160,120,32,0.95)';
   }
   priceEl.textContent = fmtPriceFull(targetPrice);
   priceEl.className = 'cell-price';
 
   const bpsEl = document.createElement('div');
-  bpsEl.style.cssText = `font-size:10px;color:rgba(0,0,0,0.35);`;
+  bpsEl.style.cssText = `font-size:9px;font-style:italic;color:rgba(60,45,20,0.35);`;
   bpsEl.textContent = `${bpsDiff >= 0 ? '+' : ''}${bpsDiff} bps`;
   bpsEl.className = 'cell-bps';
 
@@ -462,7 +461,7 @@ function createCell(row, colIdx, colTime, isPast){
 
   if(!isPast){
     cell.addEventListener('mouseenter', () => {
-      if(!cell.dataset.placed) cell.style.background = 'rgba(220,200,175,0.6)';
+      if(!cell.dataset.placed) cell.style.background = 'rgba(192,168,128,0.25)';
     });
     cell.addEventListener('mouseleave', () => {
       if(!cell.dataset.placed) cell.style.background = bg;
@@ -522,10 +521,10 @@ function placeBet(row, colIdx, cell, mult, colTime, isUp){
   placedBets.set(key, {colIdx, mult, payout, colTime, isUp, targetPrice, resolved: false});
 
   cell.dataset.placed = '1';
-  cell.style.background = 'rgba(245,197,24,0.12)';
-  cell.style.outline = '1.5px solid rgba(245,197,24,0.6)';
+  cell.style.background = 'rgba(160,120,32,0.10)';
+  cell.style.outline = '1.5px solid rgba(160,120,32,0.55)';
   cell.style.outlineOffset = '-1px';
-  cell.querySelector('div').style.color = 'rgba(245,197,24,0.9)';
+  cell.querySelector('div').style.color = 'rgba(160,120,32,0.95)';
 
   showToast(`Placed $${stake} @ ${mult}x — wins $${payout}`, 'info');
 }
@@ -673,14 +672,22 @@ function resolveBet(bet, key){
     score += 10;
     saveScore();
     if(cell){
-      cell.style.background = 'rgba(0,168,84,0.5)';
-      cell.style.outline = '1.5px solid rgba(0,168,84,0.9)';
+      cell.style.background = '#2d6a2d';
+      cell.style.outline = '1.5px solid #1a4a1a';
+      cell.style.outlineOffset = '-1px';
+      cell.style.boxShadow = 'inset 0 0 0 1000px rgba(255,255,255,0.08)';
+      const priceEl = cell.querySelector('.cell-price');
+      if(priceEl) priceEl.style.color = '#1a4a1a';
     }
     showToast(`WIN! +10 PTS ($${bet.payout})`, 'win');
   } else {
     if(cell){
-      cell.style.background = 'rgba(234,57,67,0.45)';
-      cell.style.outline = '1.5px solid rgba(234,57,67,0.7)';
+      cell.style.background = '#8b1a1a';
+      cell.style.outline = '1.5px solid #5a0d0d';
+      cell.style.outlineOffset = '-1px';
+      cell.style.boxShadow = 'inset 0 0 0 1000px rgba(255,255,255,0.06)';
+      const priceEl = cell.querySelector('.cell-price');
+      if(priceEl) priceEl.style.color = '#4a1010';
     }
     showToast(`Miss — price didn't reach that level`, 'lose');
   }
@@ -701,28 +708,28 @@ function drawMain(){
   const c = mainCtx;
   c.clearRect(0, 0, vpW, vpH);
 
-  // ── FADE OVERLAY for past (left of NOW line) ──
+  // ── FADE OVERLAY for past (left of NOW line) — parchment vellum ──
   if(!fadeGradient || fadeGradient.nowX !== nowX){
     fadeGradient = c.createLinearGradient(0, 0, nowX, 0);
     fadeGradient.nowX = nowX;
-    fadeGradient.addColorStop(0,   'rgba(249,246,233,0.95)');
-    fadeGradient.addColorStop(0.6, 'rgba(249,246,233,0.6)');
-    fadeGradient.addColorStop(1,   'rgba(249,246,233,0.0)');
+    fadeGradient.addColorStop(0,   'rgba(236,225,196,0.97)');
+    fadeGradient.addColorStop(0.6, 'rgba(236,225,196,0.62)');
+    fadeGradient.addColorStop(1,   'rgba(236,225,196,0.0)');
   }
   c.fillStyle = fadeGradient;
   c.fillRect(0, 0, nowX, vpH);
 
-  // ── NOW LINE ──
+  // ── NOW LINE — antique gold ──
   c.beginPath();
   c.moveTo(nowX, 0); c.lineTo(nowX, vpH);
-  c.strokeStyle = 'rgba(212,165,0,0.8)';
+  c.strokeStyle = 'rgba(160,120,32,0.75)';
   c.lineWidth = 1;
   c.setLineDash([4,4]);
   c.stroke();
   c.setLineDash([]);
 
   // NOW label
-  c.fillStyle = 'rgba(212,165,0,0.95)';
+  c.fillStyle = 'rgba(160,120,32,0.95)';
   c.font = '700 9px JetBrains Mono';
   c.textAlign = 'center';
   c.fillText('NOW', nowX, 11);
@@ -737,13 +744,14 @@ function drawMain(){
       const y = priceToY(pt.p);
       if(first){ c.moveTo(x, y); first = false; } else c.lineTo(x, y);
     });
-    c.strokeStyle = 'rgba(0,168,84,0.2)';
+    // glow — verdigris
+    c.strokeStyle = 'rgba(42,124,79,0.18)';
     c.lineWidth = 7;
     c.lineJoin = 'round';
     c.lineCap  = 'round';
     c.stroke();
 
-    // core line
+    // core line — verdigris gradient
     c.beginPath();
     first = true;
     priceHistory.forEach(pt => {
@@ -758,43 +766,49 @@ function drawMain(){
       lineGradient = c.createLinearGradient(lineStartX, 0, nowX, 0);
       lineGradient.startX = lineStartX;
       lineGradient.nowX = nowX;
-      lineGradient.addColorStop(0,   'rgba(0,168,84,0.1)');
-      lineGradient.addColorStop(0.7, 'rgba(0,168,84,0.5)');
-      lineGradient.addColorStop(1,   'rgba(0,168,84,1)');
+      lineGradient.addColorStop(0,   'rgba(42,124,79,0.08)');
+      lineGradient.addColorStop(0.7, 'rgba(42,124,79,0.55)');
+      lineGradient.addColorStop(1,   'rgba(42,124,79,1.0)');
     }
     c.strokeStyle = lineGradient;
-    c.lineWidth = 1.5;
+    c.lineWidth = 1.8;
     c.stroke();
   }
 
-  // ── PRICE DOT (head) ──
+  // ── PRICE DOT (head) — verdigris ──
   const headY = priceToY(price);
   // outer glow
   c.beginPath();
-  c.arc(nowX, headY, 9, 0, Math.PI*2);
-  c.fillStyle = 'rgba(0,168,84,0.15)';
+  c.arc(nowX, headY, 10, 0, Math.PI*2);
+  c.fillStyle = 'rgba(42,124,79,0.12)';
   c.fill();
-  // dot
+  // dot ring
   c.beginPath();
-  c.arc(nowX, headY, 4.5, 0, Math.PI*2);
-  c.fillStyle = '#00a854';
+  c.arc(nowX, headY, 5, 0, Math.PI*2);
+  c.fillStyle = '#2a7c4f';
   c.fill();
-  // inner
+  // inner bright
   c.beginPath();
-  c.arc(nowX, headY, 1.8, 0, Math.PI*2);
-  c.fillStyle = '#fff';
+  c.arc(nowX, headY, 2, 0, Math.PI*2);
+  c.fillStyle = 'rgba(255,248,230,0.9)';
   c.fill();
 
-  // ── CURRENT PRICE LABEL ──
+  // ── CURRENT PRICE LABEL — antique gold tag ──
   const priceLabel = fmtPriceFull(price);
-  const lw = c.measureText(priceLabel).width + 10;
-  c.fillStyle = '#00a854';
-  roundRect(c, nowX + 8, headY - 9, lw, 18, 3);
+  c.font = '700 9px JetBrains Mono';
+  const lw = c.measureText(priceLabel).width + 12;
+  c.fillStyle = '#2a7c4f';
+  roundRect(c, nowX + 8, headY - 10, lw, 20, 2);
   c.fill();
-  c.fillStyle = '#fff';
+  // Label border line
+  c.strokeStyle = 'rgba(42,124,79,0.5)';
+  c.lineWidth = 0.5;
+  roundRect(c, nowX + 8, headY - 10, lw, 20, 2);
+  c.stroke();
+  c.fillStyle = '#f8f3e7';
   c.font = '700 9px JetBrains Mono';
   c.textAlign = 'left';
-  c.fillText(priceLabel, nowX + 13, headY + 3.5);
+  c.fillText(priceLabel, nowX + 14, headY + 3.5);
 
   // ── HORIZONTAL PRICE GRIDLINES ──
   c.textAlign = 'right';
@@ -811,7 +825,7 @@ function drawMain(){
         // Also a faint line across
         c.moveTo(0, minorY);
         c.lineTo(vpW, minorY);
-        c.strokeStyle = 'rgba(0,0,0,0.025)';
+        c.strokeStyle = 'rgba(120,92,40,0.022)';
         c.lineWidth = 1;
         c.stroke();
       }
@@ -819,7 +833,7 @@ function drawMain(){
 
     c.beginPath();
     c.moveTo(0, mainY); c.lineTo(vpW, mainY);
-    c.strokeStyle = 'rgba(0,0,0,0.06)';
+    c.strokeStyle = 'rgba(120,92,40,0.09)';
     c.lineWidth = 1;
     c.stroke();
   });
@@ -830,12 +844,12 @@ function drawTimebar(){
   const w = timebarCanvas.width, h = timebarCanvas.height;
   c.clearRect(0, 0, w, h);
 
-  // background
-  c.fillStyle = 'rgba(255,255,255,1)';
+  // background — aged vellum
+  c.fillStyle = 'rgba(248,243,231,1)';
   c.fillRect(0, 0, w, h);
 
   // border bottom
-  c.fillStyle = 'rgba(0,0,0,0.08)';
+  c.fillStyle = 'rgba(120,92,40,0.15)';
   c.fillRect(0, h-1, w, 1);
 
   // column time labels
@@ -853,18 +867,18 @@ function drawTimebar(){
       : secsDiff + 's';
     const isPast = t < gameTime;
 
-    // tick mark
-    c.fillStyle = isPast ? 'rgba(0,0,0,0.06)' : 'rgba(0,0,0,0.15)';
+    // tick mark — brass
+    c.fillStyle = isPast ? 'rgba(120,92,40,0.08)' : 'rgba(120,92,40,0.2)';
     c.fillRect(x - 0.5, h - 6, 1, 6);
 
-    c.fillStyle = secsDiff === 0 ? 'rgba(212,165,0,0.95)'
-      : isPast ? 'rgba(0,0,0,0.2)'
-      : 'rgba(0,0,0,0.45)';
+    c.fillStyle = secsDiff === 0 ? 'rgba(160,120,32,0.95)'
+      : isPast ? 'rgba(80,60,30,0.22)'
+      : 'rgba(60,45,20,0.5)';
     c.fillText(label, x, h - 10);
   });
 
-  // NOW line in timebar
-  c.fillStyle = 'rgba(212,165,0,0.6)';
+  // NOW line in timebar — antique gold
+  c.fillStyle = 'rgba(160,120,32,0.55)';
   c.fillRect(nowX - 0.5, 0, 1, h);
 }
 
@@ -919,13 +933,6 @@ function showToast(msg, type){
 // ═══════════════════════════════════════════════
 //  CONTROLS
 // ═══════════════════════════════════════════════
-document.querySelectorAll('.s-btn').forEach(b => {
-  b.addEventListener('click', () => {
-    document.querySelectorAll('.s-btn').forEach(x => x.classList.remove('active'));
-    b.classList.add('active');
-    stake = parseFloat(b.dataset.v);
-  });
-});
 
 document.querySelectorAll('.pair-chip').forEach(c => {
   c.addEventListener('click', () => {
@@ -976,9 +983,9 @@ async function handleWalletClick() {
     loadScore();
     if (btn) {
       btn.textContent = "Connect Wallet";
-      btn.style.background = "rgba(212,165,0,0.1)";
-      btn.style.color = "var(--yellow)";
-      btn.style.borderColor = "rgba(212,165,0,0.4)";
+      btn.style.background = "rgba(160,120,32,0.1)";
+      btn.style.color = "var(--gold)";
+      btn.style.borderColor = "rgba(160,120,32,0.4)";
     }
     showToast("Wallet disconnected", "info");
     return;
@@ -1011,9 +1018,9 @@ async function handleWalletClick() {
     // Update button UI
     if (btn) {
       btn.innerHTML = `<span>${truncateAddress(addr)}</span>`;
-      btn.style.background = "rgba(0,168,84,0.2)";
+      btn.style.background = "rgba(42,124,79,0.15)";
       btn.style.color = "var(--green)";
-      btn.style.borderColor = "rgba(0,168,84,0.5)";
+      btn.style.borderColor = "rgba(42,124,79,0.4)";
     }
     showToast("Connected via Cartridge!", "win");
   } catch (err) {
